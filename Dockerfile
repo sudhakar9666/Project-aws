@@ -1,18 +1,18 @@
-# Base image
-FROM python:3.11-slim
+# Use AWS public Python image (slim)
+FROM public.ecr.aws/docker/library/python:3.11-slim
 
 # Set working directory
 WORKDIR /app
 
-# Install dependencies
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy application code
+COPY . /app
 
-# Copy app code
-COPY app.py .
+# Upgrade pip and install dependencies
+RUN python3 -m pip install --upgrade pip \
+    && pip install --no-cache-dir -r requirements.txt
 
-# Expose port
+# Expose port (if your app runs on 5000, change if different)
 EXPOSE 5000
 
-# Run the app
-CMD ["python", "app.py"]
+# Run the Python app
+CMD ["python3", "app.py"]
